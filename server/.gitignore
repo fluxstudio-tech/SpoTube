@@ -1,0 +1,17 @@
+# Gizli bilgiler — ASLA GitHub'a yükleme!
+.env
+.env.local
+.env.production
+.env*.local
+
+# Node
+node_modules/
+npm-debug.log*
+
+# Logs
+logs/
+*.log
+
+# Build
+dist/
+build/

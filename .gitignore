@@ -1,0 +1,29 @@
+# Environment variables
+server/.env
+server/.env.local
+client-desktop/.env
+client-mobile/.env
+
+# Dependencies
+node_modules/
+server/node_modules/
+client-desktop/node_modules/
+
+# Build outputs
+dist/
+build/
+out/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Prisma generated
+server/node_modules/.prisma/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Electron packaged
+release/

@@ -1,0 +1,96 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id @default(uuid())
+  email         String    @unique
+  passwordHash  String
+  username      String    @unique
+  role          Role      @default(USER)
+  isVerified    Boolean   @default(false)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  playlists     Playlist[]
+  tracks        Track[] // Uploaded by user
+  favorites     Favorite[]
+  auditLogs     AuditLog[]
+}
+
+enum Role {
+  USER
+  ADMIN
+  MODERATOR
+}
+
+model Track {
+  id            String    @id @default(uuid())
+  title         String
+  artist        String
+  duration      Int       // in seconds
+  source        SourceType
+  sourceId      String?   // YouTube Video ID or S3 Object Key
+  thumbnail     String?   // URL to image
+  uploaderId    String?   
+  uploader      User?     @relation(fields: [uploaderId], references: [id])
+  createdAt     DateTime  @default(now())
+  playlistItems PlaylistItem[]
+  favorites     Favorite[]
+}
+
+enum SourceType {
+  YOUTUBE
+  UPLOAD
+}
+
+model Playlist {
+  id          String   @id @default(uuid())
+  name        String
+  description String?
+  coverUrl    String?
+  isPublic    Boolean  @default(false)
+  ownerId     String
+  owner       User     @relation(fields: [ownerId], references: [id])
+  items       PlaylistItem[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model PlaylistItem {
+  id         String   @id @default(uuid())
+  playlistId String
+  trackId    String
+  position   Int      // Ordering
+  playlist   Playlist @relation(fields: [playlistId], references: [id], onDelete: Cascade)
+  track      Track    @relation(fields: [trackId], references: [id], onDelete: Cascade)
+  addedAt    DateTime @default(now())
+
+  @@unique([playlistId, trackId])
+}
+
+model Favorite {
+  id        String   @id @default(uuid())
+  userId    String
+  trackId   String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  track     Track    @relation(fields: [trackId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([userId, trackId])
+}
+
+model AuditLog {
+  id        String   @id @default(uuid())
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id])
+  action    String
+  ipAddress String
+  riskScore Int      @default(0)
+  details   Json?
+  createdAt DateTime @default(now())
+}

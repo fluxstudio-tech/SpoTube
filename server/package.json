@@ -1,0 +1,33 @@
+{
+  "name": "spotube-server",
+  "version": "1.0.0",
+  "description": "Cross-platform music streaming backend",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js",
+    "db:push": "prisma db push",
+    "db:generate": "prisma generate"
+  },
+  "dependencies": {
+    "@distube/ytdl-core": "^4.16.12",
+    "@fastify/cors": "^8.3.0",
+    "@fastify/helmet": "^11.0.0",
+    "@fastify/jwt": "^7.2.1",
+    "@fastify/rate-limit": "^8.0.3",
+    "@prisma/client": "^5.2.0",
+    "argon2": "^0.31.0",
+    "dotenv": "^16.3.1",
+    "fastify": "^4.23.2",
+    "ioredis": "^5.3.2",
+    "node-fetch": "^2.7.0",
+    "spotify-uri": "^4.1.0",
+    "spotify-url-info": "^3.3.0",
+    "yt-search": "^2.13.1",
+    "zod": "^3.22.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1",
+    "prisma": "^5.2.0"
+  }
+}
